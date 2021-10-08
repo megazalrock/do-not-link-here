@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            padding: 0;
+            margin: 0;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+        .container {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            padding: 32px;
+            box-sizing: border-box;
+            align-items: center;
+            justify-content: center;
+        }
+        .text {
+            margin: 0;
+            text-align: center;
+            font-size: 10px;
+            line-height: 1;
+            font-weight: bold;
+            transition: font-size 100ms linear;
+        }
+        .sizeDetector {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            padding: 0 32px;
+            box-sizing: border-box;
+            visibility: hidden;
+            margin: 0;
+            text-align: center;
+            font-size: 10px;
+            line-height: 1;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        (()=>{
+            window.addEventListener('DOMContentLoaded', () => {
+                const textElement = document.querySelector('.text');
+                const sizeDetector = document.createElement('div');
+                sizeDetector.classList.add('sizeDetector');
+                sizeDetector.innerText = textElement.innerText;
+                document.body.appendChild(sizeDetector);
+                const setFontSize = () => {
+                    console.count('setFontSize');
+                    let fontSize = 10;
+                    sizeDetector.style.fontSize = `${fontSize}px`;
+                    let height = sizeDetector.getBoundingClientRect().height;
+                    while (fontSize >= height && fontSize < 1000) {
+                        sizeDetector.style.fontSize = `${fontSize}px`;
+                        height = sizeDetector.getBoundingClientRect().height;
+                        fontSize++;
+                    }
+                    textElement.style.fontSize = `${fontSize - 3}px`;
+                };
+                setFontSize();
+
+                let timerId = null;
+
+                window.addEventListener('resize', () => {
+                    if (timerId) {
+                        clearTimeout(timerId);
+                    }
+                    timerId = setTimeout(setFontSize, 100);
+                });
+            })
+        })();
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text">
+            Do not link <a href="https://do-not-link-here.com">here</a>
+        </h1>
+    </div>
+</body>
+</html>
